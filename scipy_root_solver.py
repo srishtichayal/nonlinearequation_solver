@@ -130,23 +130,21 @@ class Solution():
         
         output_log = io.StringIO()
         with contextlib.redirect_stdout(output_log):
+            print("\nSolving using SciPy's optimize.root:")
             print("\nInitial Guess Used:")
             for var, val in zip(self.variables, initial_guesses):
                 print(f" {var} = {val:.4f}")
-            
+        
             print("\nFinal Solution:")
             for var, val in zip(sym_vars, sol.x):
                 print(f" {var} = {val:.6f}")
 
-            print("\nResiduals: [")
+            print("\nResiduals:")
             for i, val in enumerate(sol.fun):
-                print(f" {val:.4e},")
-            print("]")
+                print(f"Eq{i+1}: {val:.4e},")
 
             print(f"\nFinal Residual Norm: {np.linalg.norm(sol.fun):.4e}")
 
-            if hasattr(sol, 'nfev'):
-                print(f"Function Evaluations: {sol.nfev}")
         
         return {
             "solution_dict": {str(var): val for var, val in zip(sym_vars, sol.x)},

@@ -95,6 +95,7 @@ class Solution:
 
         output_log = io.StringIO()
         with contextlib.redirect_stdout(output_log):
+            print("\nSolving using Newton's Raphson Method:")
             print("\nInitial Guess Used:")
             for var, val in zip(self.variables, x):
                 print(f" {var} = {val:.4f}")
@@ -116,7 +117,6 @@ class Solution:
 
                 print(f"\nIteration {iteration + 1}:")
                 print(" Residuals: ", np.round(F, 6))
-                print(" Δx: ", np.round(delta, 6))
                 print(" Residual Norm: ", np.linalg.norm(F))
 
             else:
@@ -126,6 +126,9 @@ class Solution:
             for var, val in zip(sym_vars, x):
                 print(f" {var} = {val:.6f}")
 
+            print("\nResiduals:")
+            for i, res in enumerate(F):
+                print(f"Eq{i+1}: {res:.6e}")       
             print(f"\nFinal Residual Norm: {np.linalg.norm(F):.4e}")
 
         return {

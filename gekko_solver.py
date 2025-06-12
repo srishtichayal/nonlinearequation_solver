@@ -85,7 +85,8 @@ class Solution():
         self.variables = list(variables)
         
 
-    def solution(self, equations, initial_guess=None): #initial guess is a dictionary
+    def solution(self, equations, initial_guess=None):  # initial_guess is a dictionary
+        original_eqs = [eq.strip() for eq in equations]  # keep original for residuals
         equations = self.process_equations(equations)
         self.get_variables(equations)
         m = GEKKO(remote=False)
@@ -96,27 +97,47 @@ class Solution():
             g_vars = {}
             for var in self.variables:
                 if var in initial_guess:
-                    g_vars[var] = m.Var(value = initial_guess[var], name=var)
+                    g_vars[var] = m.Var(value=initial_guess[var], name=var)
                 else:
-                    g_vars[var] = m.Var(value = random.uniform(0, 2), name=var)
-            
-        #Inject coefficient values directly into locals
+                    g_vars[var] = m.Var(value=random.uniform(0, 2), name=var)
+
+        # Inject coefficient values directly into locals
         local_context = {**g_vars, **self.coefficients, "m": m}
 
-        #Add equations
+        # Add equations
         for eq_str in equations:
             m.Equation(eval(eq_str, {}, local_context))
 
         output_log = io.StringIO()
         with contextlib.redirect_stdout(output_log):
+            print("\nSolving using GEKKO: ")
             m.solve(disp=True)
             solution_dict = {str(var): g_vars[var].value[0] for var in self.variables if var != 'm'}
             print("\nFinal Solution: ")
             for var, val in solution_dict.items():
                 print(f"{var} = {val:.6f}")
 
+            # --- Residual Computation ---
+            print("\nResiduals:")
+            sym_table = {k: v for k, v in solution_dict.items()}
+            sym_table.update(self.coefficients)
+            sym_table.update({
+                'sqrt': math.sqrt, 'sin': math.sin, 'cos': math.cos, 'tan': math.tan,
+                'log': math.log, 'ln': math.log, 'exp': math.exp, 'pi': math.pi, 'e': math.e
+            })
+
+            for i, eq in enumerate(original_eqs, 1):
+                try:
+                    # Convert equation to residual form: lhs - rhs
+                    lhs, rhs = eq.split('=')
+                    lhs_val = eval(lhs.strip(), {}, sym_table)
+                    rhs_val = eval(rhs.strip(), {}, sym_table)
+                    residual = lhs_val - rhs_val
+                    print(f"Eq{i}: {residual:.6e}")
+                except Exception as e:
+                    print(f"Eq{i}: Could not compute residual → {e}")
+
         return {
-            "solution_dict": {str(var): g_vars[var].value[0] for var in self.variables if var != 'm'},
+            "solution_dict": solution_dict,
             "log": output_log.getvalue()
         }
-        

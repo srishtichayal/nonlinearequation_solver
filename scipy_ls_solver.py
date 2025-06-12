@@ -96,6 +96,7 @@ class Solution():
         # Start capturing output
         output_log = io.StringIO()
         with contextlib.redirect_stdout(output_log):
+            print("\nSolving using Scipy's optimize.least_squares:")
             def func(x):
                 return np.array(f_lambdified(*x), dtype=np.float64)
 
@@ -113,14 +114,12 @@ class Solution():
             for var, val in zip(sym_vars, sol.x):
                 print(f"{var} = {val:.6f}")
 
-            print("\nResiduals: [")
-            for val in sol.fun:
-                print(f" {val:.4e},")
-            print("]")
+            print("\nResiduals: ")
+            for i, val in enumerate(sol.fun):
+                print(f"Eq{i+1}: {val:.4e},")
+
 
             print(f"\nFinal Residual Norm: {np.linalg.norm(sol.fun):.4e}")
-            print(f"Function Evaluations (Total nfev): {sol.nfev}")
-            print(f"Jacobian Evaluations (Total njev): {sol.njev}")
 
         return {
             "solution_dict": {str(var): val for var, val in zip(sym_vars, sol.x)},
