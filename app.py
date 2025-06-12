@@ -19,8 +19,23 @@ def extract_variables():
 
     try:
         equations_raw = equations_raw.strip()
-        eq_blocks = [block.strip().split('\n') for block in equations_raw.split('---')]
-        equations = [eq.strip() for block in eq_blocks for eq in block if eq.strip()]
+
+        # Step 1: Split into blocks if multiple equation blocks are separated by '---'
+        eq_blocks = [block.strip() for block in equations_raw.split('---')]
+
+        equations = []
+
+        # Step 2: For each block, process each line
+        for block in eq_blocks:
+            lines = block.split('\n')
+            for line in lines:
+                # Remove comments and strip whitespace
+                clean = line.split('#', 1)[0].strip()
+                if clean:
+                    equations.append(clean)
+
+
+        # Now pass cleaned equations to your solver
         results = extract_var(solver, equations, constants_raw)
 
         output_str = ""
@@ -41,8 +56,20 @@ def solve():
 
     try:
         equations_raw = equations_raw.strip()
-        eq_blocks = [block.strip().split('\n') for block in equations_raw.split('---')]
-        equations = [eq.strip() for block in eq_blocks for eq in block if eq.strip()]
+        # Step 1: Split into blocks if multiple equation blocks are separated by '---'
+        eq_blocks = [block.strip() for block in equations_raw.split('---')]
+
+        equations = []
+
+        # Step 2: For each block, process each line
+        for block in eq_blocks:
+            lines = block.split('\n')
+            for line in lines:
+                # Remove comments and strip whitespace
+                clean = line.split('#', 1)[0].strip()
+                if clean:
+                    equations.append(clean)
+
         results = solve_equations(solver, equations, initial_guesses, constants_raw)
 
         return jsonify({"success": True, "solution": results['log']})

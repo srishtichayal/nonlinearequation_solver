@@ -5,6 +5,7 @@ import re
 import random
 import io
 import contextlib
+import math
 random.seed(42)
 
 class Solution:
@@ -17,30 +18,43 @@ class Solution:
     def process_equations(self, equations):
         return [eq.split('=')[0].strip() for eq in equations]
 
-    def safe_eval(self, expr):
-        node = ast.parse(expr, mode='eval')
-        for subnode in ast.walk(node):
-            if not isinstance(subnode, (
-                ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant,
-                ast.operator, ast.unaryop
-            )):
-                raise ValueError(f"Disallowed expression: '{expr}'")
-        return eval(expr, {"__builtins__": {}})
-
     def parse_constants_file(self):
         if self.constantspath:
             filepath = self.constantspath
             with open(filepath, 'r') as file:
-                for line in file:
-                    line = line.strip()
-                    if '=' in line:
-                        key, value = line.split('=', 1)
-                        key = key.strip()
-                        value = value.strip()
-                        try:
-                            self.coefficients[key] = self.safe_eval(value)
-                        except Exception as e:
-                            raise ValueError(f"Invalid expression for '{key}': '{value}' → {e}")
+                lines = file.readlines()
+
+            # First, preprocess lines to strip comments and empty lines
+            cleaned_lines = []
+            for line in lines:
+                line = line.split('#', 1)[0].strip()  # remove comment and trim
+                if line:  # skip empty lines
+                    cleaned_lines.append(line)
+
+            # Allowed math functions/constants
+            safe_math = {
+                'sqrt': math.sqrt,
+                'sin': math.sin,
+                'cos': math.cos,
+                'tan': math.tan,
+                'log': math.log,  # natural log
+                'ln': math.log,   # alias for natural log
+                'exp': math.exp,
+                'pi': math.pi,
+                'e': math.e
+            }
+
+            # Evaluate constants in order; constants may depend on previous ones
+            for line in cleaned_lines:
+                if '=' in line:
+                    key, value = line.split('=', 1)
+                    key = key.strip()
+                    value = value.strip()
+                    try:
+                        # Combine safe math functions with previously defined constants
+                        self.coefficients[key] = eval(value, {"__builtins__": {}}, {**safe_math, **self.coefficients})
+                    except Exception as e:
+                        raise ValueError(f"Invalid expression for '{key}': '{value}' → {e}")
 
     def get_variables(self, equations):
         self.parse_constants_file()

@@ -1,0 +1,10 @@
+- Mpa * Cp * (T3 - Tamb) + Qchar - (((T3 + T3) / 2 - T_iow) / (t_i / (k_i * 4 * As2))) = 0
+- (Mpa + Msa1) * Cp * T4 + Mpa * Cp * T3 + Msa1 * Cp * Tamb + Qfuel - (((T4 + T4) / 2 - T_iow) / (t_i / (k_i * 3 * As3))) = 0
+- (Mpa + Msa1) * Cp * (T5 - T4) + Qint - (((T5 + T5) / 2 - T_iow) / (t_i / (k_i * 4 * As4))) = 0
+- (Msa2 + Msa3) * Cp * (T5p - Tamb) + ((T_iow - (T5p + Tamb) / 2) / (1 / (h_g * As_i))) + ((T_ciw - (T5p + Tamb) / 2) / (1 / (h_g * As_c))) = 0
+- (Mpa + Msa1 + Msa2) * Cp * T6 + (Mpa + Msa1) * Cp * T5 + Msa2 * Cp * T5p + Qgas1 - (((T6 + T6) / 2 - T_iow) / (t_i / (k_i * As6))) = 0
+- (Mpa + Msa1 + Msa2 + Msa3) * Cp * T8 + (Mpa + Msa1 + Msa2) * Cp * T6 + Msa3 * Cp * T5p + Qgas2 - (((T8 + T8) / 2 - T_iow) / (t_i / (k_i * As6))) = 0
+- (Mpa + Msa1 + Msa2 + Msa3) * Cp * (T9 - T8) - (((T9 + T9) / 2 - T_iow) / (t_i / (k_i * 4 * As8))) = 0
+- (((T3 + T3) / 2 - T_iow) / (t_i / (k_i * 4 * As2))) - (((T4 + T4) / 2 - T_iow) / (t_i / (k_i * 3 * As3))) - (((T5 + T5) / 2 - T_iow) / (t_i / (k_i * 4 * As4))) - (((T6 + T6) / 2 - T_iow) / (t_i / (k_i * As6))) - (((T8 + T8) / 2 - T_iow) / (t_i / (k_i * As6))) - (((T9 + T9) / 2 - T_iow) / (t_i / (k_i * 4 * As8))) + ((T_iow - (Tamb + Tamb) / 2) / (1 / (h_g * As_i))) + (sigma * (T_iow ** 4 - T_ciw ** 4) / ((1 - emissivity_i) / emissivity_i / As_i + 1 / As_i + (1 - emissivity_cs) / emissivity_cs / As_c) ) + ((T_iow ** 4 - Tamb ** 4) / (1 / (emissivity_i * sigma * As_ia))) = 0
+- (sigma * (T_iow ** 4 - T_ciw ** 4) / ((1 - emissivity_i) / emissivity_i / As_i + 1 / As_i + (1 - emissivity_cs) / emissivity_cs / As_c) ) + ((T_ciw - T_cow) / (t_cs / (k_cs * As_c))) + ((T_ciw - (T5p + Tamb) / 2) / (1 / (h_g * As_c))) = 0
+- ((T_ciw - T_cow) / (t_cs / (k_cs * As_c))) + ((T_cow ** 4 - Tamb ** 4) / (1 / (emissivity_cs * sigma * As_c))) + ((T_cow - Tamb) / (1 / (h_g * As_c)) ) = 0

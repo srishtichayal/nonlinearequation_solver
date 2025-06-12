@@ -59,7 +59,10 @@ for eq_file in args.equations:
     if not os.path.isfile(eq_file):
         raise FileNotFoundError(f"Equations file not found: {eq_file}")
     with open(eq_file, 'r') as f:
-        equations.extend(line.strip() for line in f if line.strip())
+        for line in f:
+            line = line.split('#', 1)[0].strip()  # Remove comments and trailing spaces
+            if line:
+                equations.append(line)
 
 # --- Solve ---
 start_time = time.time()
