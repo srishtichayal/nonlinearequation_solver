@@ -55,7 +55,7 @@ Then open the link shown in your terminal (usually [http://127.0.0.1:5000/](http
 Run the solver directly via:
 
 ```bash
-python code_runner.py
+python code_runner.py --solver solver --equations equations --constants constants(Optional) --answers answers(Optional)
 ```
 
 **Options:**
@@ -187,7 +187,7 @@ python code_runner.py --solver scipyls --equations equations.txt equations1.txt 
 
 ---
 
-## Guidelines for Writing Equations and Constants
+## Guidelines for Writing Equations, Constants and Initial Guesses
 ### Equations
 1. Each equation must be written in the form expression = 0.
    e.g: (write ```a*x**2 + b*x + c = 0``` instead of ```a*x**2 + b*x + c```)
@@ -209,7 +209,7 @@ python code_runner.py --solver scipyls --equations equations.txt equations1.txt 
    e.g: (write g = 9.8 in the constants file, not in the equations)
 2. Constants can depend on other constants, just define them in the correct order.
    e.g: (write ```a = 2```, ```b = sqrt(a) + 1```, with a above b)
-3. Constants must be fully numeric — they cannot depend on any variables.
+3. Constants cannot depend on any variables of the equations.
    e.g: (write ```k = 2*pi``` instead of ```k = 2*x```)
 4. Allowed functions in constants: sqrt, sin, cos, tan, log, ln, exp, pi.
    e.g: (write ```theta = cos(pi/3)```)
@@ -217,6 +217,13 @@ python code_runner.py --solver scipyls --equations equations.txt equations1.txt 
    e.g: (by default: e = exp(1), or you can write e = 2 to override)
 6. Avoid using names that contain math function names (like sin, cos, tan, sqrt, log, ln, exp, pi) when using the Gekko solver.
    e.g: (write k_sine instead of ksin, or lambda_val instead of lexp)
+
+### Initial Guesses
+1. Initial guesses must be numeric values only (x = 1.5, y = 0).
+2. They cannot include arithmetic or math functions (invalid: x = 2+3 or x = sin(2)).
+3. In the CLI version, initial guesses cannot be provided by the user. 
+4. In the Flask interface, you can enter initial guesses; if left empty, random values will be used automatically. You can also choose to provide guesses for only some variables, guesses for the rest will be randomly generated.
+5. If you already know the variables, you don’t need to click “Extract Variables to set initial guesses” in the web interface, You can directly paste your guesses in the initial guesses block.
 
 ### General Rules
 1. Variable and constant names must be different.
