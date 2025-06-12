@@ -205,18 +205,18 @@ python code_runner.py --solver scipyls --equations system_of_equations_MBE.txt s
    e.g: (write exp(1) if you mean Euler’s number, not e)
 
 ### Constants
-1. All constants must be defined numerically in the constants file.
+1. All constants must be defined in the constants file.
    e.g: (write g = 9.8 in the constants file, not in the equations)
 2. Constants can depend on other constants, just define them in the correct order.
    e.g: (write ```a = 2```, ```b = sqrt(a) + 1```, with a above b)
 3. Constants cannot depend on any variables of the equations.
-   e.g: (write ```k = 2*pi``` instead of ```k = 2*x```)
+   e.g: (write ```k = 2*pi``` instead of ```k = 2*x```, where x is one of the variables)
 4. Allowed functions in constants: sqrt, sin, cos, tan, log, ln, exp, pi.
    e.g: (write ```theta = cos(pi/3)```)
-5. e will be interpreted as Euler's number by default, unless explicitly redefined.
-   e.g: (by default: e = exp(1), or you can write e = 2 to override)
-6. Avoid using names that contain math function names (like sin, cos, tan, sqrt, log, ln, exp, pi) when using the Gekko solver.
-   e.g: (write k_sine instead of ksin, or lambda_val instead of lexp)
+5. e and pi will be interpreted as Euler's number and pi respectively by default, unless explicitly redefined. 
+   e.g: (by default: pi = 3.14 unless you write pi = 2 to override)
+6. Avoid using names that contain math function names (like sin, cos, tan, sqrt, log, ln, exp, pi) as substrings when using the Gekko solver.
+   e.g: (write k_si instead of ksin, or lex instead of lexp)
 
 ### Initial Guesses
 1. Initial guesses must be numeric values only (x = 1.5, y = 0).
@@ -228,8 +228,8 @@ python code_runner.py --solver scipyls --equations system_of_equations_MBE.txt s
 ### General Rules
 1. Variable and constant names must be different.
    e.g: (use x as a variable and a as a constant, not both named x)
-2. Names can contain letters and underscores, but cannot start with a number.
-   e.g: (use temp_1, _k, or lambda_val instead of 2value or a*b)
+2. Names can start with letters or underscores and can contain numbers, but cannot start with a number. 
+   e.g: (use value2 instead of 2value)
 3. Lines starting with # are treated as comments and ignored. Any text after # in a line is ignored.
    e.g: (write ```# this is a comment``` or ```a = 3  # acceleration constant```)
 
