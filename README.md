@@ -188,17 +188,44 @@ python code_runner.py --solver scipyls --equations equations.txt equations1.txt 
 ---
 
 ## Guidelines for Writing Equations and Constants
+### Equations
+1. Each equation must be written in the form expression = 0.
+   ➤ (write ```a*x**2 + b*x + c = 0``` instead of ```a*x**2 + b*x + c```)
+2. Do not define any constants in the equations file.
+   ➤ (define ```a = 5``` in the constants file instead of the equations file)
+3. Use ** for powers instead of ^.
+   ➤ (write x**2 instead of x^2)
+4. Use * for multiplication, even between constants and variables.
+   ➤ (write a*b instead of ab, and 2*x instead of 2x)
+5. Use exp(x) for exponentials instead of e**x.
+   ➤ (write exp(g) instead of e**g)
+6. Allowed math functions: sqrt, sin, cos, tan, log, ln, exp, pi.
+   ➤ (write sqrt(x) + cos(pi/4) instead of custom or undefined math)
+7. e has no special meaning in equations, it will be treated as a normal variable or constant name.
+   ➤ (write exp(1) if you mean Euler’s number, not e)
 
-1. Use ** for powers (e.g., x**2 instead of x^2).
-2. Always use * for multiplication, even between constants or variables (e.g., a*b instead of ab).
-3. Use exp() for exponentials instead of e**x (e.g., exp(g)).
-4. Variable and constant names may contain any letters and underscores(leading/trailing underscores allowed) but cannot start with a number.
-5. Comments starting with # are automatically ignored in both the constants and equations files, everything after # on a line is ignored.
-6. Do not define any constants in the equations file, all constants should be defined exclusively in the constants file.
-7. Constants must be fully defined numerically in the constants file itself and cannot depend on variables used in the equations.
-8. The constants file can resolve dependencies between constants, but the dependent constant must appear after all constants it depends on.
-9. Initial guesses are optional in the web interface, If omitted random guesses will be generated. There is no option of user defined initial guesses in the CLI.
-10. ⚠️ When using the Gekko solver, avoid naming constants with substrings like sin, cos, tan, sqrt, log, ln, exp, or pi. These are interpreted as built-in functions. For example, avoid names like ksin, kexp, lnev.
+### Constants
+1. All constants must be defined numerically in the constants file.
+   ➤ (write g = 9.8 in the constants file, not in the equations)
+2. Constants can depend on other constants, just define them in the correct order.
+   ➤ (write a = 2, b = sqrt(a) + 1, with a above b)
+3. Constants must be fully numeric — they cannot depend on any variables.
+   ➤ (write k = 2*pi instead of k = 2*x)
+4. Allowed functions in constants: sqrt, sin, cos, tan, log, ln, exp, pi.
+   ➤ (write theta = cos(pi/3))
+5. e will be interpreted as Euler's number by default, unless explicitly redefined.
+   ➤ (by default: e = exp(1), or you can write e = 2.71 to override)
+6. Avoid using names that contain math function names (like sin, cos, tan, sqrt, log, ln, exp, pi) when using the Gekko solver.
+   ➤ (write k_sine instead of ksin, or lambda_val instead of lexp)
+
+### General Rules
+1. Variable and constant names must be different.
+   ➤ (use x as a variable and a as a constant, not both named x)
+2. Names can contain letters and underscores, but cannot start with a number.
+   ➤ (use temp_1, _k, or lambda_val instead of 2value or a*b)
+3. Lines starting with # are treated as comments and ignored. Any text after # in a line is ignored.
+   ➤ (write # this is a comment or a = 3  # acceleration constant)
+
 
 ---
 
