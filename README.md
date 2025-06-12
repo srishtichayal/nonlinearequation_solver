@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Interactive Web App
+## Interactive Web App
 
 A Flask interface lets you interactively:
 
@@ -50,7 +50,7 @@ Then open the link shown in your terminal (usually [http://127.0.0.1:5000/](http
 
 ---
 
-### Command Line Execution
+## Command Line Execution
 
 Run the solver directly via:
 
@@ -179,10 +179,10 @@ Jacobian Evaluations (Total njev): 9
 
 #### Multiple Equation Files Example
 
-Suppose you have two equation files: `equations.txt` and `equations1.txt` representing coupled systems, and a constants file `constants.txt` with coefficients. You can provide them all to the solver like:
+Suppose you have two equation files: `system_of_equations_MBE.txt` and `system_of_equations_TEE.txt` representing coupled systems, and a constants file `constants.txt` with coefficients. You can provide them all to the solver like:
 
 ```bash
-python code_runner.py --solver scipyls --equations equations.txt equations1.txt --constants constants.txt
+python code_runner.py --solver scipyls --equations system_of_equations_MBE.txt system_of_equations_TEE.txt --constants constants.txt
 ```
 
 ---
