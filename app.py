@@ -77,18 +77,13 @@ def solve():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
-_browser_opened = False  # Declare globally at the top
 
-def open_browser_once():
-    global _browser_opened  # So the function can access and modify the global variable
-    if not _browser_opened:
-        _browser_opened = True
-        webbrowser.open_new('http://127.0.0.1:5000/')
+def open_browser():
+    webbrowser.open_new('http://127.0.0.1:5000/')
 
 if __name__ == '__main__':
-    # Safe browser opening that works across terminal and IDE
-    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        threading.Timer(1.0, open_browser_once).start()
-
-    # You can set debug=False in production
-    app.run(debug=True)
+    import os
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true": 
+        # This only runs once — after reloader kicks in
+        threading.Timer(1.0, open_browser).start()
+    app.run(debug=True) 
