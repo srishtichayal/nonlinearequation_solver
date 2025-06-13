@@ -3,6 +3,7 @@ from core_runner import solve_equations
 from core_runner import extract_var
 import webbrowser
 import threading
+import os
 
 app = Flask(__name__)
 
@@ -76,12 +77,18 @@ def solve():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
-def open_browser():
-    webbrowser.open_new('http://127.0.0.1:5000/')
+_browser_opened = False  # Declare globally at the top
+
+def open_browser_once():
+    global _browser_opened  # So the function can access and modify the global variable
+    if not _browser_opened:
+        _browser_opened = True
+        webbrowser.open_new('http://127.0.0.1:5000/')
 
 if __name__ == '__main__':
-    import os
+    # Safe browser opening that works across terminal and IDE
     if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        # This only runs once — after reloader kicks in
-        threading.Timer(1.0, open_browser).start()
+        threading.Timer(1.0, open_browser_once).start()
+
+    # You can set debug=False in production
     app.run(debug=True)
