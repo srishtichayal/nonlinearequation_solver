@@ -123,7 +123,7 @@ class Solution():
             sym_table.update(self.coefficients)
             sym_table.update({
                 'sqrt': math.sqrt, 'sin': math.sin, 'cos': math.cos, 'tan': math.tan,
-                'log': math.log, 'ln': math.log, 'exp': math.exp, 'pi': math.pi, 'e': math.e
+                'log': math.log, 'ln': math.log, 'exp': math.exp, 'pi': math.pi
             })
 
             for i, eq in enumerate(original_eqs, 1):
